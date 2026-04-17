@@ -31,24 +31,24 @@
     --secondary-foreground: 230 30% 96%;
 
     --muted: 240 25% 14%;
-    --muted-foreground: 230 15% 65%;
+    --muted-foreground: 230 22% 78%;
 
-    --destructive: 0 84% 62%;
+    --destructive: 0 84% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 152 70% 50%;
-    --warning: 38 95% 60%;
+    --success: 152 70% 52%;
+    --warning: 38 95% 62%;
 
-    --border: 240 30% 22%;
+    --border: 240 30% 26%;
     --input: 240 30% 18%;
     --ring: 262 83% 58%;
 
     --radius: 1rem;
 
-    /* Glass surfaces */
+    /* Glass surfaces — increased opacity for legibility */
     --glass: 240 40% 14% / 0.55;
-    --glass-strong: 240 40% 12% / 0.75;
-    --glass-border: 240 50% 70% / 0.18;
+    --glass-strong: 240 40% 12% / 0.78;
+    --glass-border: 240 50% 75% / 0.14;
 
     /* Gradients */
     --gradient-bg: radial-gradient(ellipse 80% 60% at 20% 0%, hsl(262 70% 22% / 0.7), transparent 60%),
@@ -95,24 +95,53 @@
     background: var(--gradient-bg);
     background-attachment: fixed;
     font-feature-settings: "ss01", "cv11";
+    letter-spacing: 0.01em;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Tighter display headings, but still airy */
+  h1, h2, h3, h4 {
+    letter-spacing: -0.005em;
   }
 }
 
 @layer components {
   .glass {
-    background: hsl(var(--glass));
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    background: linear-gradient(135deg, hsl(0 0% 100% / 0.05), hsl(0 0% 100% / 0.02)), hsl(var(--glass));
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
   }
 
   .glass-strong {
-    background: hsl(var(--glass-strong));
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    background: linear-gradient(135deg, hsl(0 0% 100% / 0.06), hsl(0 0% 100% / 0.02)), hsl(var(--glass-strong));
+    backdrop-filter: blur(28px) saturate(170%);
+    -webkit-backdrop-filter: blur(28px) saturate(170%);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
+  }
+
+  /* Subtle gradient hairline border — replaces noisy flow-border by default */
+  .gradient-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(140deg, hsl(var(--primary) / 0.55), hsl(var(--accent) / 0.35) 50%, transparent 80%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
   }
 
   /* Animated gradient border for highlighted cards */

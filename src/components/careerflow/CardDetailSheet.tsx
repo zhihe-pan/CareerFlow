@@ -8,7 +8,7 @@ import { JobCard, RoadmapStep, STAGES } from "@/lib/types";
 import { aiBuildRoadmap } from "@/lib/ai";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { Wand2, Loader2, FileText, Sparkles, CheckCircle2, Circle, Trash2, Calendar, MapPin, Briefcase } from "lucide-react";
+import { Wand2, Loader2, FileText, Sparkles, CheckCircle2, Circle, Trash2, Calendar, MapPin, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -46,9 +46,9 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
         checklist: s.checklist.map((t, j) => ({ id: `${i}-${j}`, text: t, done: false })),
       }));
       onSetRoadmap(card.id, built);
-      toast.success("Roadmap built — let's go.");
+      toast.success("路径已生成 — 出发吧 🚀");
     } catch (e: any) {
-      toast.error(e.message || "Failed to build roadmap");
+      toast.error(e.message || "路径生成失败");
     } finally {
       setBuilding(false);
     }
@@ -65,7 +65,7 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
 
   const saveReflection = () => {
     onUpdate(card.id, { reflection });
-    toast.success("Reflection saved");
+    toast.success("复盘已保存");
   };
 
   return (
@@ -73,12 +73,12 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
       <SheetContent className="glass-strong border-l-glass-border w-full sm:max-w-xl overflow-y-auto p-0">
         <div className="p-6 border-b border-border/40 bg-gradient-to-br from-primary/15 via-transparent to-accent/10">
           <SheetHeader>
-            <p className="text-xs uppercase tracking-widest text-muted-foreground">{card.company}</p>
-            <SheetTitle className="font-display text-2xl text-gradient">{card.role}</SheetTitle>
+            <p className="text-xs tracking-widest text-muted-foreground">{card.company}</p>
+            <SheetTitle className="font-display text-2xl text-gradient leading-tight">{card.role}</SheetTitle>
           </SheetHeader>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            {card.salary && <span className="inline-flex items-center gap-1 text-accent font-mono"><Briefcase className="h-3 w-3" />{card.salary}</span>}
-            {card.location && <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{card.location}</span>}
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[13px]">
+            {card.salary && <span className="inline-flex items-center gap-1 text-accent font-mono font-medium"><Wallet className="h-3.5 w-3.5" />{card.salary}</span>}
+            {card.location && <span className="inline-flex items-center gap-1 text-foreground/80"><MapPin className="h-3.5 w-3.5" />{card.location}</span>}
           </div>
 
           <div className="mt-4 flex flex-wrap gap-1.5">
@@ -87,10 +87,10 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
                 key={s.id}
                 onClick={() => onUpdate(card.id, { stage: s.id })}
                 className={cn(
-                  "text-[10px] px-2.5 py-1 rounded-full border transition-all",
+                  "text-[11px] px-2.5 py-1 rounded-full border transition-all",
                   card.stage === s.id
                     ? "bg-gradient-primary text-primary-foreground border-transparent shadow-glow"
-                    : "border-border/60 text-muted-foreground hover:text-foreground hover:border-border"
+                    : "border-border/60 text-foreground/70 hover:text-foreground hover:border-border"
                 )}
               >
                 {s.label}
@@ -99,7 +99,7 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
           </div>
 
           <div className="mt-4">
-            <Label className="text-[10px] uppercase text-muted-foreground flex items-center gap-1"><Calendar className="h-3 w-3" /> Deadline</Label>
+            <Label className="text-[11px] text-muted-foreground flex items-center gap-1"><Calendar className="h-3 w-3" /> 截止时间</Label>
             <Input
               type="datetime-local"
               value={card.deadline ? new Date(card.deadline).toISOString().slice(0, 16) : ""}
@@ -112,13 +112,13 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
         <div className="p-6 space-y-6">
           {card.summary && (
             <section>
-              <h3 className="text-sm font-display font-semibold mb-2">Overview</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{card.summary}</p>
+              <h3 className="text-sm font-display font-semibold mb-2">岗位概述</h3>
+              <p className="text-sm text-foreground/85 leading-relaxed">{card.summary}</p>
               {card.requirements && card.requirements.length > 0 && (
-                <ul className="mt-3 space-y-1">
+                <ul className="mt-3 space-y-1.5">
                   {card.requirements.map((r, i) => (
-                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
-                      <span className="mt-1 h-1 w-1 rounded-full bg-accent shrink-0" />{r}
+                    <li key={i} className="text-[13px] text-foreground/80 flex items-start gap-2 leading-relaxed">
+                      <span className="mt-1.5 h-1 w-1 rounded-full bg-accent shrink-0" />{r}
                     </li>
                   ))}
                 </ul>
@@ -129,18 +129,18 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
           <section>
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-display font-semibold flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-primary-glow" /> Stepwise Roadmap
+                <Sparkles className="h-3.5 w-3.5 text-primary-glow" /> Stepwise 路径拆解
               </h3>
               <Button size="sm" variant="outline" onClick={handleBuild} disabled={building} className="h-7 text-xs">
-                {building ? <Loader2 className="h-3 w-3 animate-spin" /> : <><Wand2 className="h-3 w-3 mr-1" /> {card.roadmap.length ? "Regenerate" : "AI Build"}</>}
+                {building ? <Loader2 className="h-3 w-3 animate-spin" /> : <><Wand2 className="h-3 w-3 mr-1" /> {card.roadmap.length ? "重新生成" : "AI 生成"}</>}
               </Button>
             </div>
 
             {card.roadmap.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border/60 p-6 text-center">
-                <p className="text-xs text-muted-foreground mb-3">No roadmap yet. Let AI break this goal into actionable steps.</p>
+                <p className="text-xs text-foreground/70 mb-3 leading-relaxed">还没有路径规划。让 AI 为这个目标拆解出可执行的关键节点。</p>
                 <Button onClick={handleBuild} disabled={building} className="bg-gradient-primary shadow-glow">
-                  {building ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Wand2 className="h-4 w-4 mr-2" />One-click decompose</>}
+                  {building ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Wand2 className="h-4 w-4 mr-2" />一键拆解为目标</>}
                 </Button>
               </div>
             ) : (
@@ -162,28 +162,28 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
                         done ? "bg-success" : active ? "bg-gradient-primary shadow-glow scale-125" : "bg-muted"
                       )} />
                       <div className={cn(
-                        "rounded-xl p-3 transition-all",
-                        active ? "glass flow-border" : "bg-muted/20"
+                        "rounded-xl p-3.5 transition-all",
+                        active ? "glass gradient-border" : "bg-muted/25"
                       )}>
                         <div className="flex items-baseline justify-between gap-2">
-                          <h4 className="text-sm font-semibold">{step.title}</h4>
-                          {active && <span className="text-[9px] uppercase tracking-wider text-primary-glow font-mono">Now</span>}
+                          <h4 className="text-sm font-semibold text-foreground">{step.title}</h4>
+                          {active && <span className="text-[10px] tracking-wider text-primary-glow font-mono font-semibold">进行中</span>}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                        <p className="text-xs text-foreground/70 mt-1 leading-relaxed">{step.description}</p>
                         {step.checklist.length > 0 && (
-                          <ul className="mt-2 space-y-1">
+                          <ul className="mt-2.5 space-y-1.5">
                             {step.checklist.map((c) => (
                               <li key={c.id}>
                                 <button
                                   onClick={() => toggleCheck(step.id, c.id)}
-                                  className="w-full text-left flex items-start gap-2 text-xs hover:text-foreground transition-colors group"
+                                  className="w-full text-left flex items-start gap-2 text-[13px] hover:text-foreground transition-colors group leading-relaxed"
                                 >
                                   {c.done ? (
-                                    <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0 mt-px" />
+                                    <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                                   ) : (
-                                    <Circle className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-px group-hover:text-foreground" />
+                                    <Circle className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5 group-hover:text-foreground" />
                                   )}
-                                  <span className={cn(c.done && "line-through text-muted-foreground")}>{c.text}</span>
+                                  <span className={cn("text-foreground/85", c.done && "line-through text-muted-foreground")}>{c.text}</span>
                                 </button>
                               </li>
                             ))}
@@ -199,30 +199,30 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
 
           <section>
             <h3 className="text-sm font-display font-semibold mb-2 flex items-center gap-1.5">
-              <FileText className="h-3.5 w-3.5" /> Document Vault
+              <FileText className="h-3.5 w-3.5" /> 简历版本库
             </h3>
-            <div className="rounded-xl border border-dashed border-border/60 p-4 text-center text-xs text-muted-foreground">
-              Drop the resume version used for this application
-              <p className="mt-1 text-[10px] opacity-70">PDF preview · coming soon</p>
+            <div className="rounded-xl border border-dashed border-border/60 p-4 text-center text-xs text-foreground/70">
+              拖入用于此次申请的简历版本
+              <p className="mt-1 text-[10px] opacity-70">PDF 预览 · 即将上线</p>
             </div>
           </section>
 
           <section>
-            <h3 className="text-sm font-display font-semibold mb-2">AI Reflection</h3>
+            <h3 className="text-sm font-display font-semibold mb-2">AI 复盘助手</h3>
             <Textarea
-              placeholder="How did the interview feel? What questions caught you off guard?"
+              placeholder="这次面试感受如何？哪些问题让你措手不及？AI 会帮你总结优劣势。"
               value={reflection}
               onChange={(e) => setReflection(e.target.value)}
-              className="min-h-[100px] bg-background/40 border-border/60 text-sm"
+              className="min-h-[100px] bg-background/40 border-border/60 text-sm leading-relaxed"
             />
             <Button size="sm" onClick={saveReflection} variant="secondary" className="mt-2">
-              Save reflection
+              保存复盘
             </Button>
           </section>
 
           <div className="pt-4 border-t border-border/40 flex justify-between">
             <Button variant="ghost" size="sm" onClick={() => { onDelete(card.id); onClose(); }} className="text-destructive hover:text-destructive">
-              <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Delete
+              <Trash2 className="h-3.5 w-3.5 mr-1.5" /> 删除
             </Button>
           </div>
         </div>

@@ -1,45 +1,45 @@
 import { useEffect, useState, useCallback } from "react";
 import type { JobCard, Stage, RoadmapStep } from "./types";
 
-const KEY = "careerflow.cards.v1";
+const KEY = "careerflow.cards.v2-zh";
 
 const seed: JobCard[] = [
   {
     id: crypto.randomUUID(),
-    company: "Anthropic",
-    role: "Product Designer, AI",
-    salary: "$180-240K",
-    location: "Remote · SF",
-    summary: "Design intuitive interfaces for advanced AI products.",
-    requirements: ["5+ yrs product design", "Systems thinking", "AI/ML curiosity"],
+    company: "字节跳动",
+    role: "产品经理 (PM) · AI 方向",
+    salary: "¥25k-40k/月 · 16薪",
+    location: "北京 · 望京",
+    summary: "负责豆包 / 抖音相关 AI 产品方向，参与从 0 到 1 的功能定义与落地。",
+    requirements: ["985 / 211 优先", "对 LLM 产品有深度思考", "数据敏感、逻辑清晰"],
     stage: "interviewing",
     createdAt: new Date().toISOString(),
     deadline: new Date(Date.now() + 22 * 60 * 60 * 1000).toISOString(),
     roadmap: [
-      { id: "1", title: "Resume Tailoring", description: "Sharpen for AI-product narrative", checklist: [
-        { id: "a", text: "Quantify last 3 projects", done: true },
-        { id: "b", text: "Add AI keywords", done: true },
+      { id: "1", title: "简历定向优化", description: "针对 AI PM 岗位重写项目经历", checklist: [
+        { id: "a", text: "量化最近 3 个项目数据", done: true },
+        { id: "b", text: "突出 AI / 大模型相关关键词", done: true },
       ]},
-      { id: "2", title: "Outreach", description: "Find a warm intro", checklist: [
-        { id: "a", text: "Message 2 designers on LinkedIn", done: true },
+      { id: "2", title: "寻找内推", description: "找一位字节在职学长内推", checklist: [
+        { id: "a", text: "在脉脉 / 领英联系 2 位 PM", done: true },
       ]},
-      { id: "3", title: "Interview Prep", description: "Portfolio walkthrough rehearsal", checklist: [
-        { id: "a", text: "Record portfolio walkthrough", done: false },
-        { id: "b", text: "Prepare 3 STAR stories", done: false },
+      { id: "3", title: "面试准备", description: "产品 Sense + 项目深挖演练", checklist: [
+        { id: "a", text: "准备 3 个 STAR 故事", done: false },
+        { id: "b", text: "复盘豆包 / 即梦产品逻辑", done: false },
       ]},
-      { id: "4", title: "Offer & Negotiation", description: "Anchor expectations", checklist: [
-        { id: "a", text: "Research comp bands", done: false },
+      { id: "4", title: "Offer 谈判", description: "薪资锚点与意向确认", checklist: [
+        { id: "a", text: "调研同级别薪资区间", done: false },
       ]},
     ],
   },
   {
     id: crypto.randomUUID(),
-    company: "Linear",
-    role: "Senior Frontend Engineer",
-    salary: "$190-230K",
-    location: "Remote",
-    summary: "Build the fastest project tracker on the web.",
-    requirements: ["TypeScript wizard", "Performance obsessed", "Design taste"],
+    company: "美团",
+    role: "前端开发工程师",
+    salary: "¥20k-30k/月",
+    location: "北京 · 远程",
+    summary: "负责美团到店业务前端架构与性能优化。",
+    requirements: ["TypeScript 熟练", "性能优化经验", "审美在线"],
     stage: "applied",
     createdAt: new Date().toISOString(),
     deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
@@ -47,20 +47,20 @@ const seed: JobCard[] = [
   },
   {
     id: crypto.randomUUID(),
-    company: "Stripe",
-    role: "Growth PM",
-    salary: "$170-210K",
-    location: "Dublin",
+    company: "腾讯",
+    role: "增长产品经理",
+    salary: "¥22k-35k/月",
+    location: "深圳 · 南山",
     stage: "backlog",
     createdAt: new Date().toISOString(),
     roadmap: [],
   },
   {
     id: crypto.randomUUID(),
-    company: "Figma",
-    role: "Brand Designer",
-    salary: "$140-180K",
-    location: "NYC",
+    company: "小红书",
+    role: "品牌设计师",
+    salary: "¥18k-28k/月",
+    location: "上海 · 静安",
     stage: "offer",
     createdAt: new Date().toISOString(),
     roadmap: [],

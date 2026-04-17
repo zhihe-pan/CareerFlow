@@ -12,9 +12,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Space Grotesk"', "ui-sans-serif", "system-ui", "sans-serif"],
-        sans: ['Inter', "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+        display: ['"Space Grotesk"', '"PingFang SC"', '"Noto Sans SC"', '"Microsoft YaHei"', "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ['Inter', '"PingFang SC"', '"Noto Sans SC"', '"Microsoft YaHei"', "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', '"PingFang SC"', "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

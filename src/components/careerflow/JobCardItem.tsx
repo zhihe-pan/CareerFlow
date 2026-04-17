@@ -1,7 +1,7 @@
 import { JobCard } from "@/lib/types";
 import { useDraggable } from "@dnd-kit/core";
 import { DeadlinePill } from "./DeadlinePill";
-import { MapPin, Briefcase } from "lucide-react";
+import { MapPin, Wallet, Route } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -48,47 +48,49 @@ export function JobCardItem({ card, dimmed, highlighted, onClick }: Props) {
         }}
         className={cn(
           "group relative cursor-grab active:cursor-grabbing select-none",
-          "rounded-2xl p-3.5 glass transition-all duration-300",
-          "hover:-translate-y-0.5 hover:shadow-glow",
+          "rounded-2xl p-4 glass transition-all duration-300",
+          "hover:-translate-y-0.5 hover:shadow-glow hover:bg-white/[0.04]",
           isDragging && "opacity-60 rotate-1 scale-105 shadow-glow z-50",
-          highlighted && "flow-border",
+          highlighted && "gradient-border ring-1 ring-primary/30",
           dimmed && "focus-dim"
         )}
       >
         <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground truncate">
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-medium tracking-wider text-muted-foreground truncate mb-1">
               {card.company}
             </p>
-            <h3 className="font-display text-[15px] font-semibold leading-tight text-foreground truncate">
+            <h3 className="font-display text-[15px] font-semibold leading-snug text-foreground truncate">
               {card.role}
             </h3>
           </div>
           <DeadlinePill deadline={card.deadline} />
         </div>
 
-        <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12px]">
           {card.salary && (
-            <span className="inline-flex items-center gap-1 font-mono text-accent">
-              <Briefcase className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1 font-mono text-accent font-medium">
+              <Wallet className="h-3.5 w-3.5" />
               {card.salary}
             </span>
           )}
           {card.location && (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1 text-foreground/75">
+              <MapPin className="h-3.5 w-3.5" />
               {card.location}
             </span>
           )}
         </div>
 
         {totalChecks > 0 && (
-          <div className="mt-3">
-            <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
-              <span>Roadmap</span>
-              <span className="font-mono text-foreground/80">{pct}%</span>
+          <div className="mt-3.5">
+            <div className="flex items-center justify-between text-[11px] mb-1.5">
+              <span className="inline-flex items-center gap-1 text-muted-foreground">
+                <Route className="h-3 w-3" /> Stepwise 路径
+              </span>
+              <span className="font-mono font-semibold text-foreground/90">{pct}% 通关</span>
             </div>
-            <div className="h-1 w-full overflow-hidden rounded-full bg-muted/40">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/50">
               <div
                 className="h-full bg-gradient-primary transition-all duration-500"
                 style={{ width: `${pct}%` }}

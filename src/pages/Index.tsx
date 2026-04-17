@@ -4,12 +4,13 @@ import { KanbanColumn } from "@/components/careerflow/KanbanColumn";
 import { JobCardItem } from "@/components/careerflow/JobCardItem";
 import { AddCardDialog } from "@/components/careerflow/AddCardDialog";
 import { CardDetailSheet } from "@/components/careerflow/CardDetailSheet";
+import { ActivitySidebar } from "@/components/careerflow/ActivitySidebar";
 import { useCards } from "@/lib/store";
 import { JobCard, STAGES, Stage } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Sparkles, Search, Plus, Focus, Zap } from "lucide-react";
+import { Sparkles, Search, Plus, Focus, Zap, Briefcase, Video, Trophy } from "lucide-react";
 import { differenceInHours } from "date-fns";
 
 const Index = () => {
@@ -33,7 +34,6 @@ const Index = () => {
     );
   }, [cards, query]);
 
-  // Focus Mode logic — highlight cards with deadline <= 48h, dim the rest
   const { highlightedIds, dimmedIds } = useMemo(() => {
     const highlighted = new Set<string>();
     const dimmed = new Set<string>();
@@ -75,15 +75,15 @@ const Index = () => {
               <Zap className="h-4 w-4 text-primary-foreground" fill="currentColor" />
             </div>
             <div className="leading-tight">
-              <h1 className="font-display text-lg font-bold tracking-tight">CareerFlow</h1>
-              <p className="text-[10px] text-muted-foreground">Calm in the chaos of job hunting</p>
+              <h1 className="font-display text-lg font-bold tracking-tight">CareerFlow 智能求职看板</h1>
+              <p className="text-[11px] text-muted-foreground">在求职焦虑中，找到属于你的节奏</p>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-3 ml-3 pl-3 border-l border-border/50 text-[11px]">
-            <Stat label="Tracking" value={stats.total} />
-            <Stat label="Interviewing" value={stats.interviewing} accent />
-            <Stat label="Offers" value={stats.offers} success />
+          <div className="hidden md:flex items-center gap-4 ml-3 pl-4 border-l border-border/50">
+            <Stat icon={<Briefcase className="h-3.5 w-3.5" />} label="正在跟进" value={stats.total} />
+            <Stat icon={<Video className="h-3.5 w-3.5" />} label="面试中" value={stats.interviewing} accent />
+            <Stat icon={<Trophy className="h-3.5 w-3.5" />} label="已获录用" value={stats.offers} success />
           </div>
 
           <div className="relative flex-1 min-w-[160px] md:max-w-md md:mx-auto">
@@ -91,7 +91,7 @@ const Index = () => {
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search company, role, location..."
+              placeholder="搜索公司、岗位、地点……"
               className="pl-8 h-9 bg-background/40 border-border/60 text-sm"
             />
           </div>
@@ -99,7 +99,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <label className="hidden sm:flex items-center gap-2 px-3 h-9 rounded-lg bg-muted/30 border border-border/50 cursor-pointer">
               <Focus className={`h-3.5 w-3.5 ${focusMode ? "text-primary-glow" : "text-muted-foreground"}`} />
-              <span className="text-xs font-medium">Focus</span>
+              <span className="text-xs font-medium">专注模式</span>
               <Switch checked={focusMode} onCheckedChange={setFocusMode} />
             </label>
 
@@ -108,7 +108,7 @@ const Index = () => {
               className="bg-gradient-primary hover:opacity-90 shadow-glow h-9 gap-1.5"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">AI Add</span>
+              <span className="hidden sm:inline">✨ AI 智能导入</span>
               <Plus className="h-3.5 w-3.5 sm:hidden" />
             </Button>
           </div>
@@ -118,15 +118,15 @@ const Index = () => {
           <div className="mt-3 glass rounded-2xl px-4 py-2.5 flex items-center justify-between animate-fade-in">
             <div className="flex items-center gap-2 text-xs">
               <span className="h-2 w-2 rounded-full bg-primary-glow animate-pulse" />
-              <span className="font-display font-semibold">Focus Mode</span>
-              <span className="text-muted-foreground">— showing only the {highlightedIds.size || 0} most urgent within 48h</span>
+              <span className="font-display font-semibold">专注模式已开启</span>
+              <span className="text-muted-foreground">— 仅显示 48 小时内最紧急的 {highlightedIds.size || 0} 个任务</span>
             </div>
-            <button onClick={() => setFocusMode(false)} className="text-[11px] text-muted-foreground hover:text-foreground">Exit</button>
+            <button onClick={() => setFocusMode(false)} className="text-[11px] text-muted-foreground hover:text-foreground">退出</button>
           </div>
         )}
       </header>
 
-      {/* Kanban */}
+      {/* Kanban + Sidebar */}
       <main className="flex-1 px-4 sm:px-8 pb-8">
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-none">
@@ -142,6 +142,7 @@ const Index = () => {
                 onCardClick={(c) => setActive(c)}
               />
             ))}
+            <ActivitySidebar cards={cards} onCardClick={(c) => setActive(c)} />
           </div>
           <DragOverlay>
             {draggingCard && (
@@ -165,11 +166,12 @@ const Index = () => {
   );
 };
 
-function Stat({ label, value, accent, success }: { label: string; value: number; accent?: boolean; success?: boolean }) {
+function Stat({ icon, label, value, accent, success }: { icon: React.ReactNode; label: string; value: number; accent?: boolean; success?: boolean }) {
   return (
-    <div className="flex items-baseline gap-1">
-      <span className={`font-mono font-semibold ${accent ? "text-primary-glow" : success ? "text-success" : "text-foreground"}`}>{value}</span>
+    <div className="flex items-center gap-1.5 text-[12px]">
+      <span className={`${accent ? "text-primary-glow" : success ? "text-success" : "text-foreground/70"}`}>{icon}</span>
       <span className="text-muted-foreground">{label}</span>
+      <span className={`font-mono font-semibold ${accent ? "text-primary-glow" : success ? "text-success" : "text-foreground"}`}>{value}</span>
     </div>
   );
 }
