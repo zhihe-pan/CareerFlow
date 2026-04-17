@@ -18,10 +18,8 @@ interface Props {
 
 export function AddCardDialog({ open, onOpenChange, onCreate }: Props) {
   const [tab, setTab] = useState("ai");
-  // manual
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
-  // ai
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [parsed, setParsed] = useState<Awaited<ReturnType<typeof aiParseJD>> | null>(null);
@@ -36,9 +34,9 @@ export function AddCardDialog({ open, onOpenChange, onCreate }: Props) {
     try {
       const p = await aiParseJD(text);
       setParsed(p);
-      toast.success("Parsed! Review and save.");
+      toast.success("解析完成！请确认信息后保存。");
     } catch (e: any) {
-      toast.error(e.message || "Failed to parse");
+      toast.error(e.message || "解析失败，请重试");
     } finally {
       setLoading(false);
     }
@@ -71,64 +69,64 @@ export function AddCardDialog({ open, onOpenChange, onCreate }: Props) {
         <DialogHeader>
           <DialogTitle className="font-display text-xl flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary-glow" />
-            Add a new application
+            添加新的求职机会
           </DialogTitle>
-          <DialogDescription>
-            Capture an opportunity in seconds — manually, or paste the chaotic JD and let AI structure it.
+          <DialogDescription className="text-foreground/70">
+            手动快速记录，或将 BOSS / 实习僧 / 拉勾的乱码 JD 一键粘贴，让 AI 帮你结构化。
           </DialogDescription>
         </DialogHeader>
 
         <Tabs value={tab} onValueChange={setTab} className="mt-2">
           <TabsList className="grid grid-cols-2 w-full bg-muted/40">
             <TabsTrigger value="ai" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">
-              <Wand2 className="h-3.5 w-3.5 mr-1.5" /> AI Smart Paste
+              <Wand2 className="h-3.5 w-3.5 mr-1.5" /> ✨ AI 智能粘贴
             </TabsTrigger>
-            <TabsTrigger value="manual">Quick Add</TabsTrigger>
+            <TabsTrigger value="manual">⚡ 快速添加</TabsTrigger>
           </TabsList>
 
           <TabsContent value="ai" className="space-y-3 mt-4">
             {!parsed ? (
               <>
                 <Textarea
-                  placeholder="Paste the messy job description here — from BOSS, LinkedIn, anywhere..."
+                  placeholder="将 BOSS 直聘 / 实习僧 / 拉勾 / 内推平台等任何混乱的岗位描述粘贴到这里……"
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  className="min-h-[180px] bg-background/50 border-border/60 font-mono text-xs"
+                  className="min-h-[180px] bg-background/50 border-border/60 text-sm leading-relaxed"
                 />
                 <Button
                   onClick={handleParse}
                   disabled={!text.trim() || loading}
                   className="w-full bg-gradient-primary hover:opacity-90 shadow-glow"
                 >
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Sparkles className="h-4 w-4 mr-2" /> Parse with AI</>}
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Sparkles className="h-4 w-4 mr-2" /> AI 智能解析</>}
                 </Button>
               </>
             ) : (
               <div className="space-y-2.5 text-sm animate-fade-in">
-                <Field label="Company" value={parsed.company} onChange={(v) => setParsed({ ...parsed, company: v })} />
-                <Field label="Role" value={parsed.role} onChange={(v) => setParsed({ ...parsed, role: v })} />
+                <Field label="公司名称" value={parsed.company} onChange={(v) => setParsed({ ...parsed, company: v })} />
+                <Field label="岗位名称" value={parsed.role} onChange={(v) => setParsed({ ...parsed, role: v })} />
                 <div className="grid grid-cols-2 gap-2">
-                  <Field label="Salary" value={parsed.salary} onChange={(v) => setParsed({ ...parsed, salary: v })} />
-                  <Field label="Location" value={parsed.location} onChange={(v) => setParsed({ ...parsed, location: v })} />
+                  <Field label="薪资" value={parsed.salary} onChange={(v) => setParsed({ ...parsed, salary: v })} />
+                  <Field label="工作地点" value={parsed.location} onChange={(v) => setParsed({ ...parsed, location: v })} />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Summary</Label>
-                  <p className="text-sm mt-1 p-2.5 rounded-lg bg-muted/30 border border-border/40">{parsed.summary}</p>
+                  <Label className="text-xs text-muted-foreground">岗位概述</Label>
+                  <p className="text-sm mt-1 p-2.5 rounded-lg bg-muted/30 border border-border/40 leading-relaxed text-foreground/90">{parsed.summary}</p>
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Requirements</Label>
+                  <Label className="text-xs text-muted-foreground">岗位要求</Label>
                   <ul className="mt-1.5 space-y-1">
                     {parsed.requirements.map((r, i) => (
-                      <li key={i} className="text-xs flex items-start gap-1.5 text-muted-foreground">
-                        <Check className="h-3 w-3 mt-0.5 text-accent shrink-0" /> {r}
+                      <li key={i} className="text-xs flex items-start gap-1.5 text-foreground/80 leading-relaxed">
+                        <Check className="h-3 w-3 mt-1 text-accent shrink-0" /> {r}
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <Button variant="outline" onClick={() => setParsed(null)} className="flex-1">Re-parse</Button>
+                  <Button variant="outline" onClick={() => setParsed(null)} className="flex-1">重新解析</Button>
                   <Button onClick={handleSaveAi} className="flex-1 bg-gradient-primary shadow-glow">
-                    Add to board
+                    加入看板
                   </Button>
                 </div>
               </div>
@@ -136,14 +134,14 @@ export function AddCardDialog({ open, onOpenChange, onCreate }: Props) {
           </TabsContent>
 
           <TabsContent value="manual" className="space-y-3 mt-4">
-            <Field label="Company" value={company} onChange={setCompany} placeholder="e.g. Stripe" />
-            <Field label="Role" value={role} onChange={setRole} placeholder="e.g. Senior Designer" />
+            <Field label="公司名称" value={company} onChange={setCompany} placeholder="例如：字节跳动" />
+            <Field label="岗位名称" value={role} onChange={setRole} placeholder="例如：产品经理 / 前端开发" />
             <Button
               onClick={handleSaveManual}
               disabled={!company.trim() || !role.trim()}
               className="w-full bg-gradient-primary shadow-glow"
             >
-              Add to backlog
+              加入备选池
             </Button>
           </TabsContent>
         </Tabs>
