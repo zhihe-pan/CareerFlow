@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CareerFlow</title>
+    <script>
+      (function () {
+        var pathSegmentsToKeep = 1;
+        var l = window.location;
+        var base = l.pathname.split("/").slice(0, 1 + pathSegmentsToKeep).join("/");
+        var path = l.pathname
+          .slice(1)
+          .split("/")
+          .slice(pathSegmentsToKeep)
+          .join("/")
+          .replace(/&/g, "~and~");
+        var query = l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "";
+        l.replace(
+          l.protocol +
+            "//" +
+            l.hostname +
+            (l.port ? ":" + l.port : "") +
+            base +
+            "/?/" +
+            path +
+            query +
+            l.hash
+        );
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

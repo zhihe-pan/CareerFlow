@@ -13,7 +13,7 @@ const randomUUID = (): string => {
   );
 };
 
-const KEY = "careerflow.cards.v5-zh-interview";
+const KEY = "careerflow.cards.v6-zh-interview";
 
 const seed: JobCard[] = [
   {
