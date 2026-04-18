@@ -39,8 +39,8 @@
 ### 安装与运行
 
 ```bash
-git clone https://github.com/zhihe-pan/CareerFlow.git
-cd CareerFlow
+git clone https://github.com/zhihe-pan/career-flow.git
+cd career-flow
 npm install
 npm run dev
 ```
@@ -105,9 +105,9 @@ supabase/            # Supabase 配置与 Edge Functions
 
 ## GitHub Pages 部署
 
-本仓库名为 `CareerFlow`，对应站点根路径为 **`/CareerFlow/`**，公开地址为：
+本仓库名为 `career-flow`，对应站点根路径为 **`/career-flow/`**，公开地址为：
 
-**<https://zhihe-pan.github.io/CareerFlow/>**
+**<https://zhihe-pan.github.io/career-flow/>**
 
 ### 一次性设置（在 GitHub 网页上）
 
@@ -117,11 +117,11 @@ supabase/            # Supabase 配置与 Edge Functions
 
 ### 构建说明
 
-- 工作流使用 `npm run build -- --base=/CareerFlow/`，与 GitHub Pages 子路径一致。  
+- 工作流使用 `npm run build -- --base=/career-flow/`，与 GitHub Pages 子路径一致。  
 - 本地开发仍使用默认根路径 `npm run dev`，无需加 `base`。  
 - 路由已通过 `BrowserRouter` 的 `basename` 与 `import.meta.env.BASE_URL` 对齐子路径。
 
-若你 Fork 后仓库名不是 `CareerFlow`，请同时修改工作流里的 `--base=/你的仓库名/` 以及 Pages 文档中的 URL。
+若你 Fork 后仓库名不是 `career-flow`，请同时修改工作流里的 `--base=/你的仓库名/` 以及 Pages 文档中的 URL。
 
 ---
 
@@ -137,4 +137,4 @@ supabase/            # Supabase 配置与 Edge Functions
 
 ---
 
-**作者**：Zhihe Pan · 仓库：<https://github.com/zhihe-pan/CareerFlow>
+**作者**：Zhihe Pan · 仓库：<https://github.com/zhihe-pan/career-flow>
