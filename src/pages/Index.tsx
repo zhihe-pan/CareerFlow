@@ -111,7 +111,7 @@ const Index = () => {
 
   const draggingCard = dragId ? cards.find((c) => c.id === dragId) : null;
   const stats = useMemo(() => ({
-    applied: cards.filter((c) => c.stage === "applied").length,
+    applied: cards.filter((c) => c.stage !== "backlog").length,
     written: cards.filter((c) => c.stage === "written_test").length,
     interviewing: cards.filter((c) => c.stage === "interviewing").length,
     offers: cards.filter((c) => c.stage === "offer").length,
