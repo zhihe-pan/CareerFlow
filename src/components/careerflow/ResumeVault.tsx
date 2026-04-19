@@ -1054,7 +1054,7 @@ export const ResumeVault = ({ poolJobs = [] }: ResumeVaultProps) => {
                                 ? "border-red-900/10 bg-red-50/30 text-red-900/40"
                                 : "border-zinc-200 bg-zinc-50/50 text-zinc-400"
                             )}>
-                              {section.mandatory ? `[必填] 请从左侧拖入相关素材至「${section.title}」` : `[可选] 您暂未添加「${section.title}」`}
+                              {section.mandatory ? `[必填] 请从左侧选择相关素材填至「${section.title}」` : `[可选] 您暂未添加「${section.title}」`}
                             </div>
                           ) : (
                             <Reorder.Group axis="y" values={items} onReorder={(newOrder) => handleReorder(section.id, newOrder)} className="flex flex-col gap-5">

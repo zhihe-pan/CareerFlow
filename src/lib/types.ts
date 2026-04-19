@@ -1,4 +1,4 @@
-export type Stage = "backlog" | "applied" | "interviewing" | "offer" | "closed";
+export type Stage = "backlog" | "applied" | "written_test" | "interviewing" | "offer" | "closed";
 export type StrategicTier = "reach" | "core" | "safe";
 
 export const STAGES: { 
@@ -23,6 +23,14 @@ export const STAGES: {
     accent: "from-blue-400/50 to-cyan-300/10",
     borderColor: "border-blue-500/50",
     hoverShadow: "hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.4)]",
+    emptyText: "拖拽卡片到此"
+  },
+  { 
+    id: "written_test", 
+    label: "待笔试", 
+    accent: "from-amber-400/60 to-orange-300/10",
+    borderColor: "border-amber-500/50",
+    hoverShadow: "hover:shadow-[0_0_15px_-3px_rgba(245,158,11,0.4)]",
     emptyText: "拖拽卡片到此"
   },
   { 

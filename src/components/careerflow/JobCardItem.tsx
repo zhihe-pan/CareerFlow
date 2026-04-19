@@ -38,7 +38,7 @@ export const JobCardItem = forwardRef<HTMLDivElement, Props>(
     const pct = totalChecks ? Math.round((doneChecks / totalChecks) * 100) : 0;
 
     const interviewPillLabel =
-      card.stage === "interviewing"
+      card.stage === "interviewing" || card.stage === "written_test"
         ? getLatestPendingRoundName(card.interviewRounds) ?? card.progressStatus
         : null;
 

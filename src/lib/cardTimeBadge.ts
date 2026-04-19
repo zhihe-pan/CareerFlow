@@ -58,21 +58,21 @@ export function formatInterviewCountdownBadge(iso: string, now = new Date()): st
   if (isTomorrow(t)) return `⏰ ${formatTomorrowClock(t)}`;
 
   const hours = differenceInHours(t, now);
-  if (hours < 24 && hours >= 1) return `⏰ 距面试: ${hours}小时`;
+  if (hours < 24 && hours >= 1) return `⏰ 距开始: ${hours}小时`;
 
   if (hours < 1) {
-    if (mins < 60) return `⏰ 距面试: ${mins}分钟`;
-    return "⏰ 距面试: 1小时内";
+    if (mins < 60) return `⏰ 距开始: ${mins}分钟`;
+    return "⏰ 距开始: 1小时内";
   }
 
   const days = differenceInCalendarDays(t, now);
-  if (days >= 1) return `⏰ 距面试: ${days}天`;
+  if (days >= 1) return `⏰ 距开始: ${days}天`;
 
-  return "⏰ 即将面试";
+  return "⏰ 即将开始";
 }
 
 export function getFocusUrgentAtIso(card: JobCard): string | undefined {
   if (card.stage === "backlog") return getApplicationDeadlineIso(card);
-  if (card.stage === "interviewing") return getNextInterviewIso(card);
+  if (card.stage === "interviewing" || card.stage === "written_test") return getNextInterviewIso(card);
   return undefined;
 }

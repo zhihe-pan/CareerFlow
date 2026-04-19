@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -48,6 +48,95 @@ function newEntityId() {
   return typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
     ? crypto.randomUUID()
     : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function EditableField({
+  value,
+  onSave,
+  className,
+  inputClassName,
+  placeholder = "点击输入",
+  multiline = false,
+}: {
+  value: string;
+  onSave: (val: string) => void;
+  className?: string;
+  inputClassName?: string;
+  placeholder?: string;
+  multiline?: boolean;
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState(value);
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+      if (inputRef.current instanceof HTMLInputElement) {
+        inputRef.current.select();
+      }
+    }
+  }, [isEditing]);
+
+  const handleBlur = () => {
+    setIsEditing(false);
+    if (draft !== value) {
+      onSave(draft);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !multiline) {
+      handleBlur();
+    }
+    if (e.key === "Escape") {
+      setDraft(value);
+      setIsEditing(false);
+    }
+  };
+
+  if (isEditing) {
+    return multiline ? (
+      <textarea
+        ref={inputRef as any}
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        className={cn(
+          "w-full bg-background/50 border border-primary/30 rounded px-1 py-0.5 outline-none focus:border-primary/60 transition-colors",
+          inputClassName
+        )}
+      />
+    ) : (
+      <input
+        ref={inputRef as any}
+        type="text"
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        className={cn(
+          "w-full bg-background/50 border border-primary/30 rounded px-1 py-0.5 outline-none focus:border-primary/60 transition-colors",
+          inputClassName
+        )}
+      />
+    );
+  }
+
+  return (
+    <div
+      onClick={() => setIsEditing(true)}
+      className={cn(
+        "cursor-pointer hover:bg-white/5 rounded px-1 -mx-1 transition-colors group relative",
+        !value && "text-muted-foreground italic",
+        className
+      )}
+    >
+      {value || placeholder}
+      <Pencil className="absolute -right-5 top-1/2 -translate-y-1/2 w-3 h-3 opacity-0 group-hover:opacity-40 transition-opacity" />
+    </div>
+  );
 }
 
 function RoadmapStepBlock({
@@ -345,7 +434,7 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
     card.stage === "backlog" ? card.applicationDeadline ?? card.deadline : card.deadline;
 
   const activeStepIdx = (() => {
-    const map: Record<string, number> = { backlog: 0, applied: 1, interviewing: 2, offer: 3, closed: 3 };
+    const map: Record<string, number> = { backlog: 0, applied: 1, written_test: 1, interviewing: 2, offer: 3, closed: 3 };
     return map[card.stage] ?? 0;
   })();
 
@@ -390,14 +479,40 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
   return (
     <Sheet open={!!card} onOpenChange={(v) => !v && onClose()}>
       <SheetContent className="glass-strong border-l-glass-border w-full sm:max-w-xl overflow-y-auto p-0">
+        <SheetTitle className="sr-only">岗位详情</SheetTitle>
+        <SheetDescription className="sr-only">查看并编辑职位的详细信息、面试进度与行动清单。</SheetDescription>
         <div className="p-6 border-b border-border/40 bg-gradient-to-br from-primary/15 via-transparent to-accent/10">
           <SheetHeader>
-            <p className="text-xs tracking-widest text-muted-foreground">{card.company}</p>
-            <SheetTitle className="font-display text-2xl text-gradient leading-tight">{card.role}</SheetTitle>
+            <SheetTitle className="sr-only">岗位详情</SheetTitle>
+            <div className="sr-only">查看并编辑职位的详细信息、面试进度与行动清单。</div>
+            <EditableField
+              value={card.company}
+              onSave={(v) => onUpdate(card.id, { company: v })}
+              className="text-xs tracking-widest text-muted-foreground inline-block mb-1"
+            />
+            <EditableField
+              value={card.role}
+              onSave={(v) => onUpdate(card.id, { role: v })}
+              className="font-display text-2xl text-gradient leading-tight"
+            />
           </SheetHeader>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
-            {card.salary && <span className="inline-flex items-center gap-1 text-accent font-mono font-medium"><Wallet className="h-3.5 w-3.5" />{card.salary}</span>}
-            {card.location && <span className="inline-flex items-center gap-1 text-foreground/80"><MapPin className="h-3.5 w-3.5" />{card.location}</span>}
+            <div className="flex items-center gap-1 text-accent font-mono font-medium">
+              <Wallet className="h-3.5 w-3.5" />
+              <EditableField
+                value={card.salary ?? ""}
+                placeholder="添加薪资"
+                onSave={(v) => onUpdate(card.id, { salary: v })}
+              />
+            </div>
+            <div className="flex items-center gap-1 text-foreground/80">
+              <MapPin className="h-3.5 w-3.5" />
+              <EditableField
+                value={card.location ?? ""}
+                placeholder="添加地点"
+                onSave={(v) => onUpdate(card.id, { location: v })}
+              />
+            </div>
             <div className="flex items-center gap-2 w-full sm:w-auto sm:ml-auto">
               <span className="text-[11px] text-muted-foreground flex items-center gap-1 shrink-0">
                 <Crosshair className="h-3 w-3" /> 战略定位
@@ -474,7 +589,7 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
 
           <div className="mt-4">
             <Label className="text-[11px] text-muted-foreground flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-white" />
               {card.stage === "backlog" ? "投递截止" : "截止时间"}
             </Label>
             <Input
@@ -491,7 +606,7 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
               className="mt-1 bg-background/40 border-border/60 text-xs h-8 max-w-[240px]"
             />
           </div>
-          {card.stage === "interviewing" && (
+          {(card.stage === "interviewing" || card.stage === "written_test") && (
             <NextInterviewReadonlyHint rounds={card.interviewRounds} />
           )}
         </div>
@@ -513,7 +628,7 @@ export function CardDetailSheet({ card, onClose, onUpdate, onSetRoadmap, onDelet
             </section>
           )}
 
-          {card.stage === "interviewing" && (
+          {(card.stage === "interviewing" || card.stage === "written_test") && (
             <InterviewTimelineSection card={card} onUpdate={onUpdate} />
           )}
 

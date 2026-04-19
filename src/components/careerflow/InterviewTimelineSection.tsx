@@ -251,7 +251,7 @@ export function InterviewTimelineSection({ card, onUpdate }: Props) {
         )}
       >
         <Plus className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden />
-        添加新一轮面试
+        添加下一轮笔面试
       </button>
     </PopoverTrigger>
   );
@@ -261,7 +261,7 @@ export function InterviewTimelineSection({ card, onUpdate }: Props) {
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-display font-semibold flex items-center gap-1.5">
           <Clock className="h-3.5 w-3.5 text-orange-400" />
-          面试时间轴
+          笔面试时间轴
         </h3>
       </div>
       <p className="text-[11px] text-muted-foreground mb-2">

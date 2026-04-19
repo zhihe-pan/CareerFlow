@@ -90,7 +90,7 @@ const Index = () => {
   const getCardsByStage = useMemo(() => {
     return (stage: Stage) => {
       const base = filtered.filter((c) => c.stage === stage);
-      if (stage !== "interviewing") return base;
+      if (stage !== "interviewing" && stage !== "written_test") return base;
       return [...base].sort((a, b) => {
         const ta = getInterviewingSortTimestamp(a);
         const tb = getInterviewingSortTimestamp(b);
@@ -111,7 +111,8 @@ const Index = () => {
 
   const draggingCard = dragId ? cards.find((c) => c.id === dragId) : null;
   const stats = useMemo(() => ({
-    total: cards.length,
+    applied: cards.filter((c) => c.stage === "applied").length,
+    written: cards.filter((c) => c.stage === "written_test").length,
     interviewing: cards.filter((c) => c.stage === "interviewing").length,
     offers: cards.filter((c) => c.stage === "offer").length,
   }), [cards]);
@@ -182,7 +183,8 @@ const Index = () => {
               </div>
 
               <div className="hidden lg:flex items-center gap-4 ml-6 pl-6 border-l border-border/50">
-                <Stat icon={<Briefcase className="h-3.5 w-3.5" />} label="跟进中" value={stats.total} />
+                <Stat icon={<Briefcase className="h-3.5 w-3.5" />} label="已投递" value={stats.applied} />
+                <Stat icon={<FileText className="h-3.5 w-3.5" />} label="笔试" value={stats.written} accent />
                 <Stat icon={<Video className="h-3.5 w-3.5" />} label="面试" value={stats.interviewing} accent />
                 <Stat icon={<Trophy className="h-3.5 w-3.5" />} label="获得" value={stats.offers} success />
               </div>

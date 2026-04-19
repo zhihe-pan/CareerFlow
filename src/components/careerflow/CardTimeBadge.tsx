@@ -48,7 +48,7 @@ export function CardTimeBadge({ card }: Props) {
     );
   }
 
-  if (card.stage === "interviewing") {
+  if (card.stage === "interviewing" || card.stage === "written_test") {
     const iso = getNextInterviewIso(card);
     if (!iso) return null;
     const text = formatInterviewCountdownBadge(iso, now);

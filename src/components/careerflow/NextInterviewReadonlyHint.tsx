@@ -18,7 +18,7 @@ export function NextInterviewReadonlyHint({ rounds }: { rounds?: InterviewRound[
         "text-foreground/95 shadow-sm shadow-primary/5"
       )}
     >
-      <span className="font-medium">💡 下一场面试：</span>
+      <span className="font-medium">💡 下一场安排：</span>
       <span className="text-foreground/90">
         {next.name} · {timePart}
       </span>

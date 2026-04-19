@@ -13,7 +13,7 @@ const randomUUID = (): string => {
   );
 };
 
-const KEY = "careerflow.cards.v6-zh-interview";
+const KEY = "careerflow.cards.v8-zh-written-test";
 
 const seed: JobCard[] = [
   {
@@ -77,12 +77,19 @@ const seed: JobCard[] = [
     location: "北京 · 远程",
     summary: "负责美团到店业务前端架构与性能优化。",
     requirements: ["TypeScript 熟练", "性能优化经验", "审美在线"],
-    stage: "applied",
+    stage: "written_test",
     createdAt: new Date().toISOString(),
-    appliedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     strategicTier: "safe",
     priority: "🛡️ 保底",
     attachment: "📎 通用简历_v2",
+    interviewRounds: [
+      {
+        id: randomUUID(),
+        name: "笔试",
+        scheduledAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+        status: "pending",
+      },
+    ],
     roadmap: [],
   },
   {
